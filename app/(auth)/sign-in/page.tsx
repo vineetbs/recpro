@@ -1,8 +1,14 @@
+import { auth } from "@/app/auth";
 import LoginBar from "@/components/LoginBar";
 import RotatingQuotes from "@/components/RotatingQuotes";
 import { Video } from "lucide-react";
+import { redirect } from "next/navigation";
 
-const SigninPage = () => {
+const SigninPage = async () => {
+  const session = await auth();
+  if (session) {
+    redirect("/");
+  }
   return (
     <div className="min-h-screen flex flex-col md:flex-row items-center justify-center bg-gray-50 px-4 md:px-0">
       {/* Logo Header */}
