@@ -1,6 +1,5 @@
 import { SearchIcon, Upload, Video } from "lucide-react";
 import FilterComponent from "./FilterComponent";
-import DropdownC from "./DropDown";
 
 interface IHeader {
   heading: string;
@@ -58,8 +57,7 @@ const Header = ({ heading, subheading, userImg }: IHeader) => {
         </div>
         <div className="ml-auto grid-cols-2">
           <div className="">
-            {/* <FilterComponent /> */}
-            <DropdownC />
+            <FilterComponent />
           </div>
         </div>
       </div>
