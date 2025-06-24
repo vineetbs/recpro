@@ -1,6 +1,6 @@
 "use client";
-import { Card, CardBody } from "@heroui/card";
-import { Input } from "@heroui/input";
+import { Card, CardBody, Input } from "@heroui/react";
+
 export default function HomePage() {
   return (
     <main className="flex flex-col items-center justify-center h-[80vh] p-4 ">
