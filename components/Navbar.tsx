@@ -17,7 +17,7 @@ const Navbar = () => {
   };
   const userImg = session?.user?.image || "";
   return (
-    <div className="flex py-8 md:mx-16 justify-around border-b-1 border-gray-300">
+    <div className="flex py-8 md:mx-16 mx-4  justify-around border-b-1 border-gray-300">
       <div className="flex">
         <div className="py-1 ">
           <Video className="text-red-500" />
