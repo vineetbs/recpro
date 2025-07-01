@@ -17,6 +17,7 @@ model User {
   sessions      Session[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
+  videos        Video[]
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -75,4 +76,13 @@ model Authenticator {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
  
   @@id([userId, credentialID])
+}
+
+model Video{
+  videoId String @unique
+  userId String
+  name String
+  thumbUrl String
+  videoUrl String
+  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
 }

@@ -3,7 +3,6 @@ import { CircleUserRound, LogOutIcon, Video } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 const Navbar = () => {
   const router = useRouter();
