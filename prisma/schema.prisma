@@ -79,9 +79,10 @@ model Authenticator {
 }
 
 model Video{
-  videoId String @unique
+  videoId Int @id @default(autoincrement())
   userId String
-  name String
+  title String
+  description String
   thumbUrl String
   videoUrl String
   user User @relation(fields: [userId],references: [id],onDelete: Cascade)
