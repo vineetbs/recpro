@@ -11,23 +11,23 @@ const Navbar = () => {
   const logout = async () => {
     if (window.confirm("Are you sure you want to logout?")) {
       await signOut();
-      router.push("/");
+      router.push("/videos");
     }
   };
   const userImg = session?.user?.image || "";
   return (
     <div className="flex py-8 md:mx-16 mx-4  justify-around border-b-1 border-gray-300">
-      <div className="flex">
+      <button onClick={() => router.push("/")} className="flex">
         <div className="py-1 ">
           <Video className="text-red-500" />
         </div>
         <div className="px-2 font-extrabold text-2xl text-gray-700">RecPro</div>
-      </div>
+      </button>
       <div className="ml-auto">
         {status === "authenticated" ? (
           <div>
             <div className=" cursor-pointer">
-              <button onClick={() => router.push(`profile/1234`)}>
+              <button onClick={() => router.push(`/me`)}>
                 {userImg ? (
                   <Image
                     src={userImg}

@@ -27,7 +27,9 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "tailwind.config.js"
+    "tailwind.config.js",
+    "video.d.ts",
+    "next-env.d.ts"
   ],
   "exclude": ["node_modules"]
 }

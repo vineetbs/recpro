@@ -1,5 +1,7 @@
+"use client";
 import { SearchIcon, Upload, Video } from "lucide-react";
 import FilterComponent from "./FilterComponent";
+import { useRouter } from "next/navigation";
 
 interface IHeader {
   heading: string;
@@ -8,6 +10,7 @@ interface IHeader {
 }
 
 const Header = ({ heading, subheading, userImg }: IHeader) => {
+  const router = useRouter();
   return (
     <>
       <div className="block sm:flex justify-around">
@@ -30,17 +33,20 @@ const Header = ({ heading, subheading, userImg }: IHeader) => {
 
         <div className="ml-auto flex gap-2 mt-2">
           <figure>
-            <button className="rounded-3xl p-3 flex border border-gray-300 cursor-pointer gap-1">
+            <button
+              className="rounded-3xl p-3 flex border border-gray-300 cursor-pointer gap-1 bg-red-300"
+              onClick={() => router.push("/upload")}
+            >
               <Upload />
               <div>Upload a Video</div>
             </button>
           </figure>
-          <figure>
+          {/* <figure>
             <button className="rounded-3xl p-3 flex bg-red-300 cursor-pointer gap-1">
               <Video />
               <div>Record Video</div>
             </button>
-          </figure>
+          </figure> */}
         </div>
       </div>
 

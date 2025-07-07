@@ -83,8 +83,12 @@ model Video{
   userId String
   title String
   description String
-  thumbUrl String?
+  thumbUrl String
+  visibility Boolean
   videoUrl String
+  username String
+  userImg String?
+  duration Int
   createdAt DateTime @default(now())
   user User @relation(fields: [userId],references: [id],onDelete: Cascade)
   @@index([userId])

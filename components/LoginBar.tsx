@@ -2,12 +2,14 @@
 import { Video } from "lucide-react";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const LoginBar = () => {
   const loginGoogle = async () => {
     await signIn("google", { redirectTo: "/" });
   };
+  const router = useRouter();
   return (
     <div className="w-full max-w-sm border rounded-xl border-gray-300 shadow-xl bg-white">
       <div className="flex items-center justify-center py-4 text-2xl">
@@ -16,14 +18,14 @@ const LoginBar = () => {
       </div>
 
       <div className="px-6 text-center text-2xl font-medium space-y-1">
-        <div>Create and share your very first</div>
+        <div>Create and share your first</div>
         <div>
           <span className="text-red-600">RecPro video</span>
-          <span className="pl-1">in no time!</span>
+          <span className="pl-1"> in no time!</span>
         </div>
       </div>
 
-      <div className="px-6 pt-4 pb-6">
+      <div className="px-6 pt-4 pb-4">
         <button
           onClick={() => loginGoogle()}
           type="button"
@@ -36,6 +38,12 @@ const LoginBar = () => {
             height={20}
           />
           <span className="font-medium">Sign in with Google</span>
+        </button>
+        <button
+          onClick={() => router.push("/videos")}
+          className="pl-20 pt-2 underline text-blue-700"
+        >
+          continue without login
         </button>
       </div>
     </div>

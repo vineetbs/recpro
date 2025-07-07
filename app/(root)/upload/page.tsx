@@ -25,15 +25,11 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { useRef, useState } from "react";
-import {
-  ImageKitAbortError,
-  ImageKitInvalidRequestError,
-  ImageKitServerError,
-  ImageKitUploadNetworkError,
-  upload,
-} from "@imagekit/next";
+import { upload } from "@imagekit/next";
 
 import { Progress } from "@/components/ui/progress";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 const MAX_THUMB_SIZE = 5000000;
 const MAX_VID_SIZE = 10000000;
@@ -48,7 +44,7 @@ const ACCEPTED_VID_TYPES = ["video/mp4", "video/webm", "video/ogg"];
 const formSchema = z.object({
   title: z.string().min(2).max(50),
   description: z.string().min(2).max(50),
-  visibility: z.enum(["public", "private"]),
+  visibility: z.boolean(),
   file: z
     .any()
     .refine((files) => files?.length === 1, "Select a video file")
@@ -75,13 +71,16 @@ const formSchema = z.object({
 });
 
 export default function HomePage() {
- 
+  // const session = auth();
+  // if (!session) {
+  //   redirect("/sign-in");
+  // }
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
       description: "",
-      visibility: "public",
+      visibility: true,
       thumb: undefined,
       file: undefined,
     },
@@ -139,11 +138,13 @@ export default function HomePage() {
     setFileProgress(0);
     let thumbUrl = null;
     let videoUrl = null;
+    let duration = 0;
     const toastId = toast.loading("Preparing to upload");
 
     try {
       const thumb = values.thumb?.[0];
       const file = values.file[0];
+
       if (thumb) {
         toast.loading("Uploading video and thumbnail", { id: toastId });
         const [thumbData, fileData] = await Promise.all([
@@ -155,7 +156,6 @@ export default function HomePage() {
       } else {
         toast.loading("Uploading video", { id: toastId });
         const fileData = await handleUpload(file, setFileProgress);
-        thumbUrl = fileData?.thumbnailUrl;
         videoUrl = fileData?.url;
       }
 
@@ -165,6 +165,8 @@ export default function HomePage() {
           description: values.description,
           thumbUrl,
           videoUrl,
+          visibility: values.visibility,
+          duration,
         })
         .catch((e) => {
           throw e;
@@ -176,6 +178,7 @@ export default function HomePage() {
     } catch (error) {
       toast.error("Error Occured", { id: toastId });
       console.log(error);
+      console.log(values);
     } finally {
       setisuploading(false);
     }
@@ -183,7 +186,7 @@ export default function HomePage() {
 
   return (
     <main className="flex flex-col items-center justify-center h-[80vh] p-4 ">
-      <Toaster position="top-right" />
+      <Toaster richColors position="top-right" />
       <Card className="border-1 border-gray-300 rounded-2xl shadow-2xl">
         <h1 className="text-2xl  m-4 text-center font-semibold">
           Upload Your Video File
@@ -239,8 +242,10 @@ export default function HomePage() {
                     <FormControl>
                       <div className="w-full ">
                         <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
+                          onValueChange={(value) =>
+                            field.onChange(value === "true")
+                          }
+                          value={String(field.value)}
                         >
                           <SelectTrigger
                             className="w-full rounded-2xl border-gray-800 text-gray-700"
@@ -249,10 +254,10 @@ export default function HomePage() {
                             <SelectValue placeholder="Choose Visibility" />
                           </SelectTrigger>
                           <SelectContent className="bg-white  ">
-                            <SelectItem value="public" className="border-b-1">
+                            <SelectItem value="true" className="border-b-1">
                               Public
                             </SelectItem>
-                            <SelectItem value="private">Private</SelectItem>
+                            <SelectItem value="false">Private</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
