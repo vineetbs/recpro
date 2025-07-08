@@ -18,7 +18,7 @@ export async function GET(
     if (!video) {
       return NextResponse.json({ error: "Video Not Found" }, { status: 404 });
     }
-    console.log(video);
+    // console.log(video);
     return NextResponse.json(video, { status: 200 });
   } catch (error) {
     console.error(error);

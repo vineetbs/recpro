@@ -2,7 +2,7 @@ import VideoList from "@/components/VideoList";
 import VideoPlayer from "@/components/VideoPlayer";
 
 const page = async ({ params }: any) => {
-  const videoId = params.id[0];
+  const videoId = await params.id[0];
 
   return (
     <main className=" py-8 sm:mx-16 mx-2 overflow-visible">
