@@ -3,10 +3,11 @@ import { prisma } from "@/lib/prisma";
 import { NextResponse, type NextRequest } from "next/server";
 
 interface params {
-  params: { id: string };
+  params: { id: string[] };
 }
 export async function GET(request: NextRequest, { params }: params) {
-  const id = await parseInt(params.id);
+  const idString = params.id[0];
+  const id = parseInt(idString);
   if (isNaN(id)) {
     return NextResponse.json({ error: "Invalid Video Id" }, { status: 400 });
   }
