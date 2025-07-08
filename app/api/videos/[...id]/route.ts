@@ -3,9 +3,10 @@ import { NextResponse, type NextRequest } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string[] } }
+  { params }: { params: Promise<{ id: string[] }> }
 ) {
-  const idString = params.id[0];
+  const resolvedParams = await params;
+  const idString = resolvedParams.id[0];
   const id = parseInt(idString);
 
   if (isNaN(id)) {
