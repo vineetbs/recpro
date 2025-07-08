@@ -50,7 +50,7 @@ const Header = ({ heading, subheading, userImg }: IHeader) => {
         </div>
       </div>
 
-      <div className=" justify-around mt-4 col-span-5 relative block sm:flex  overflow-visible">
+      {/* <div className=" justify-around mt-4 col-span-5 relative block sm:flex  overflow-visible">
         <div className="flex px-4 py-2 border border-gray-400 rounded-3xl grid-cols-3 w-60 md:w-120 h-10 ">
           <div className="text-gray-600 pr-2">
             <SearchIcon />
@@ -66,7 +66,7 @@ const Header = ({ heading, subheading, userImg }: IHeader) => {
             <FilterComponent />
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

@@ -45,12 +45,16 @@ const VideoCard = ({
       <Toaster richColors />
 
       <div className="relative w-full  rounded-xl overflow-hidden aspect-video">
-        <Link href={`video/${videoId}`} className="block w-full">
+        <Link
+          href={`video/${videoId}`}
+          className="relative block w-full aspect-video overflow-hidden rounded-xl"
+        >
           <Image
             src={thumbUrl}
             alt="thumbnail"
             fill
-            className="w-full h-full object-cover rounded-xl "
+            className="object-cover"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
         </Link>
         {/* <div className="absolute text-white bg-gray-900 rounded-xl p-0.5 bottom-2 right-2">
@@ -63,7 +67,9 @@ const VideoCard = ({
         </div>
       </div>
       <Link href={`video/${videoId}`}>
-        <div className="text-2xl font-semibold text-center ">{title}</div>
+        <div className="text-2xl font-semibold text-center capitalize ">
+          {title}
+        </div>
         <div className="flex text-gray-800 ">
           <div className="p-2 pt-3 ">
             {userImg ? (

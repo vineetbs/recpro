@@ -1,5 +1,5 @@
 "use client";
-import { Card, CardBody } from "@heroui/react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -30,6 +30,8 @@ import { upload } from "@imagekit/next";
 import { Progress } from "@/components/ui/progress";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import Link from "next/link";
+import { ArrowLeftCircle } from "lucide-react";
 
 const MAX_THUMB_SIZE = 5000000;
 const MAX_VID_SIZE = 10000000;
@@ -92,30 +94,24 @@ export default function HomePage() {
 
   const authenticator = async () => {
     try {
-      // Perform the request to the upload authentication endpoint.
       const response = await fetch("/api/upload-auth");
       if (!response.ok) {
-        // If the server response is not successful, extract the error text for debugging.
         const errorText = await response.text();
         throw new Error(
           `Request failed with status ${response.status}: ${errorText}`
         );
       }
 
-      // Parse and destructure the response JSON for upload credentials.
       const data = await response.json();
       const { signature, expire, token, publicKey } = data;
       return { signature, expire, token, publicKey };
     } catch (error) {
-      // Log the original error for debugging before rethrowing a new error.
       console.error("Authentication error:", error);
       throw new Error("Authentication request failed");
     }
   };
 
   const handleUpload = async (file: any, setProgress: any) => {
-    // Retrieve authentication parameters for the upload.
-
     const authParams = await authenticator();
     const { signature, expire, token, publicKey } = authParams;
 
@@ -185,150 +181,171 @@ export default function HomePage() {
   };
 
   return (
-    <main className="flex flex-col items-center justify-center h-[80vh] p-4 ">
+    <div>
+      <div className="mx-2 md:mx-12 pt-2">
+        <Link href="/videos">
+          <Button
+            variant="ghost"
+            className="text-xl text-gray-600 hover:bg-gray-100"
+          >
+            <ArrowLeftCircle className=" h-6 w-6" />
+            Back to all videos
+          </Button>
+        </Link>
+      </div>{" "}
       <Toaster richColors position="top-right" />
-      <Card className="border-1 border-gray-300 rounded-2xl shadow-2xl">
-        <h1 className="text-2xl  m-4 text-center font-semibold">
-          Upload Your Video File
-        </h1>
-        <CardBody>
-          <Form {...form}>
-            <form
-              ref={formRef}
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-4"
-            >
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Title</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter your title"
-                        {...field}
-                        disabled={isuploading}
-                      />
-                    </FormControl>
-                    <FormMessage className="text-red-800" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter the description"
-                        {...field}
-                        disabled={isuploading}
-                      />
-                    </FormControl>
-                    <FormMessage className="text-red-800" />
-                  </FormItem>
-                )}
-              />
+      <div className="flex flex-col items-center justify-center h-[80vh] p-4 ">
+        <Card className="border border-gray-300 rounded-2xl shadow-2xl">
+          <CardHeader>
+            <CardTitle className="text-2xl text-center font-semibold">
+              Upload Your Video File
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form
+                ref={formRef}
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-4"
+              >
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Title</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter your title"
+                          {...field}
+                          disabled={isuploading}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-red-800" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter the description"
+                          {...field}
+                          disabled={isuploading}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-red-800" />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="visibility"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Visibility</FormLabel>
-                    <FormControl>
-                      <div className="w-full ">
-                        <Select
-                          onValueChange={(value) =>
-                            field.onChange(value === "true")
-                          }
-                          value={String(field.value)}
-                        >
-                          <SelectTrigger
-                            className="w-full rounded-2xl border-gray-800 text-gray-700"
-                            disabled={isuploading}
+                <FormField
+                  control={form.control}
+                  name="visibility"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Visibility</FormLabel>
+                      <FormControl>
+                        <div className="w-full ">
+                          <Select
+                            onValueChange={(value) =>
+                              field.onChange(value === "true")
+                            }
+                            value={String(field.value)}
                           >
-                            <SelectValue placeholder="Choose Visibility" />
-                          </SelectTrigger>
-                          <SelectContent className="bg-white  ">
-                            <SelectItem value="true" className="border-b-1">
-                              Public
-                            </SelectItem>
-                            <SelectItem value="false">Private</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </FormControl>
-                    <FormMessage className="text-red-800" />
-                  </FormItem>
-                )}
-              />
+                            <SelectTrigger
+                              className="w-full rounded-2xl border-gray-800 text-gray-700"
+                              disabled={isuploading}
+                            >
+                              <SelectValue placeholder="Choose Visibility" />
+                            </SelectTrigger>
+                            <SelectContent className="bg-white  ">
+                              <SelectItem value="true" className="border-b-1">
+                                Public
+                              </SelectItem>
+                              <SelectItem value="false">Private</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </FormControl>
+                      <FormMessage className="text-red-800" />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="thumb"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Upload Thumbnail (Optional)</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Upload the file"
-                        type="file"
-                        accept={ACCEPTED_IMAGE_TYPES.join(",")}
-                        onChange={(e) => {
-                          field.onChange(e.target.files);
-                        }}
-                        disabled={isuploading}
-                      />
-                    </FormControl>
-                    {isuploading && thumbProgress > 0 && (
-                      <Progress value={thumbProgress} className="w-full mt-2" />
-                    )}
-                    <FormMessage className="text-red-800" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="file"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Upload Video</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Upload the file"
-                        type="file"
-                        accept={ACCEPTED_VID_TYPES.join(",")}
-                        onChange={(e) => {
-                          field.onChange(e.target.files);
-                        }}
-                        disabled={isuploading}
-                      />
-                    </FormControl>
-                    {isuploading && fileProgress > 0 && (
-                      <Progress value={fileProgress} className="w-full mt-2" />
-                    )}
-                    <FormMessage className="text-red-800" />
-                  </FormItem>
-                )}
-              />
+                <FormField
+                  control={form.control}
+                  name="thumb"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Upload Thumbnail (Optional)</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Upload the file"
+                          type="file"
+                          accept={ACCEPTED_IMAGE_TYPES.join(",")}
+                          onChange={(e) => {
+                            field.onChange(e.target.files);
+                          }}
+                          disabled={isuploading}
+                        />
+                      </FormControl>
+                      {isuploading && thumbProgress > 0 && (
+                        <Progress
+                          value={thumbProgress}
+                          className="w-full mt-2"
+                        />
+                      )}
+                      <FormMessage className="text-red-800" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="file"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Upload Video</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Upload the file"
+                          type="file"
+                          accept={ACCEPTED_VID_TYPES.join(",")}
+                          onChange={(e) => {
+                            field.onChange(e.target.files);
+                          }}
+                          disabled={isuploading}
+                        />
+                      </FormControl>
+                      {isuploading && fileProgress > 0 && (
+                        <Progress
+                          value={fileProgress}
+                          className="w-full mt-2"
+                        />
+                      )}
+                      <FormMessage className="text-red-800" />
+                    </FormItem>
+                  )}
+                />
 
-              <div className="flex items-center w-full  justify-center">
-                <Button
-                  type="submit"
-                  className="border hover:bg-gray-800 bg-black text-white"
-                  disabled={isuploading}
-                >
-                  {isuploading ? "Uploading..." : "Submit"}
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </CardBody>
-      </Card>
-    </main>
+                <div className="flex items-center w-full  justify-center">
+                  <Button
+                    type="submit"
+                    className="border hover:bg-gray-800 bg-black text-white"
+                    disabled={isuploading}
+                  >
+                    {isuploading ? "Uploading..." : "Submit"}
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   );
 }

@@ -15,7 +15,12 @@ const page = async () => {
   //     <VideoList />
   //   </main>
   // );
-  redirect("/sign-in");
+  const session = await auth();
+  if (session) {
+    redirect("/videos");
+  } else {
+    redirect("/sign-in");
+  }
 };
 
 export default page;
